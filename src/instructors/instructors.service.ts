@@ -13,7 +13,7 @@ export class InstructorsService {
   }
 
   findAll() {
-    return `This action returns all instructors`;
+    return this.prisma.instructor.findMany();
   }
 
   findOne(id: number) {
