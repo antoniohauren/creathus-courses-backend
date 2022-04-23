@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Instructor } from '../entities/instructor.entity';
@@ -81,6 +82,16 @@ describe('InstructorsService', () => {
 
       expect(findOneSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+    });
+
+    it('Should throw 404 if instructor not found', async () => {
+      const findOneSpy = jest
+        .spyOn(service, 'findOne')
+        .mockRejectedValueOnce(new NotFoundException());
+      const promise = service.findOne('any_id');
+
+      expect(findOneSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrow(NotFoundException);
     });
   });
 
