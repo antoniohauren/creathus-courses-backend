@@ -6,3 +6,6 @@ CREATE TABLE "instructors" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "instructors_email_key" ON "instructors"("email");
