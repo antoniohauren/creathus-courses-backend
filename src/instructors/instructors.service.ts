@@ -20,8 +20,11 @@ export class InstructorsService {
     return this.prisma.instructor.findUnique({ where: { id } });
   }
 
-  update(id: number, updateInstructorDto: UpdateInstructorDto) {
-    return `This action updates a #${id} instructor`;
+  update(id: string, updateInstructorDto: UpdateInstructorDto) {
+    return this.prisma.instructor.update({
+      where: { id },
+      data: updateInstructorDto,
+    });
   }
 
   remove(id: number) {

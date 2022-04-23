@@ -34,7 +34,7 @@ export class InstructorsController {
     @Param('id') id: string,
     @Body() updateInstructorDto: UpdateInstructorDto,
   ) {
-    return this.instructorsService.update(+id, updateInstructorDto);
+    return this.instructorsService.update(id, updateInstructorDto);
   }
 
   @Delete(':id')
