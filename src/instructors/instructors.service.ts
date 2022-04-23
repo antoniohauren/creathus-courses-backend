@@ -26,7 +26,9 @@ export class InstructorsService {
     return result;
   }
 
-  update(id: string, updateInstructorDto: UpdateInstructorDto) {
+  async update(id: string, updateInstructorDto: UpdateInstructorDto) {
+    await this.findOne(id);
+
     return this.prisma.instructor.update({
       where: { id },
       data: updateInstructorDto,
