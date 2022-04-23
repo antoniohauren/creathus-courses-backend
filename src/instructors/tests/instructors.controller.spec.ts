@@ -8,14 +8,15 @@ describe('InstructorsController', () => {
   let controller: InstructorsController;
 
   const instructorStub: Instructor = {
-    id: 'any_id',
-    email: 'any_email',
-    name: 'any_name',
+    id: 'stub_id',
+    email: 'stub_email',
+    name: 'stub_name',
   };
 
   const instructorServiceMock = {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
     findAll: jest.fn(() => [instructorStub]),
+    findOne: jest.fn((id) => ({ ...instructorStub, id })),
   };
 
   beforeEach(async () => {
@@ -54,6 +55,17 @@ describe('InstructorsController', () => {
     it('Should return a list of instructors', () => {
       expect(controller.findAll()).toEqual(
         expect.arrayContaining([instructorStub]),
+      );
+    });
+  });
+
+  describe('findOne', () => {
+    it('Should return a instructor', () => {
+      expect(controller.findOne('any_id')).toEqual(
+        expect.objectContaining({
+          ...instructorStub,
+          id: 'any_id',
+        }),
       );
     });
   });
