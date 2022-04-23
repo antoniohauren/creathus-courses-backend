@@ -7,8 +7,15 @@ import { InstructorsService } from '../instructors.service';
 describe('InstructorsController', () => {
   let controller: InstructorsController;
 
+  const instructorStub: Instructor = {
+    id: 'any_id',
+    email: 'any_email',
+    name: 'any_name',
+  };
+
   const instructorServiceMock = {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
+    findAll: jest.fn(() => [instructorStub]),
   };
 
   beforeEach(async () => {
@@ -39,6 +46,14 @@ describe('InstructorsController', () => {
           email: 'any_email',
           name: 'any_name',
         }),
+      );
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return a list of instructors', () => {
+      expect(controller.findAll()).toEqual(
+        expect.arrayContaining([instructorStub]),
       );
     });
   });
