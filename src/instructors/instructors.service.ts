@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInstructorDto, UpdateInstructorDto } from './dtos';
 
@@ -6,7 +10,15 @@ import { CreateInstructorDto, UpdateInstructorDto } from './dtos';
 export class InstructorsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createInstructorDto: CreateInstructorDto) {
+  async create(createInstructorDto: CreateInstructorDto) {
+    const result = await this.prisma.instructor.findUnique({
+      where: { email: createInstructorDto.email },
+    });
+
+    if (result) {
+      throw new BadRequestException('Email already in use!');
+    }
+
     return this.prisma.instructor.create({
       data: createInstructorDto,
     });
@@ -20,7 +32,7 @@ export class InstructorsService {
     const result = await this.prisma.instructor.findUnique({ where: { id } });
 
     if (!result) {
-      throw new NotFoundException();
+      throw new NotFoundException('User not found!');
     }
 
     return result;
