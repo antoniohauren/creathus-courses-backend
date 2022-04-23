@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInstructorDto, UpdateInstructorDto } from './dtos';
 
@@ -16,8 +16,14 @@ export class InstructorsService {
     return this.prisma.instructor.findMany();
   }
 
-  findOne(id: string) {
-    return this.prisma.instructor.findUnique({ where: { id } });
+  async findOne(id: string) {
+    const result = await this.prisma.instructor.findUnique({ where: { id } });
+
+    if (!result) {
+      throw new NotFoundException();
+    }
+
+    return result;
   }
 
   update(id: string, updateInstructorDto: UpdateInstructorDto) {
