@@ -41,35 +41,41 @@ describe('InstructorsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('Should create a new instructor', async () => {
-    const createSpy = jest.spyOn(service, 'create');
-    const result = await service.create({
-      name: 'any_name',
-      email: 'any_email',
-    });
+  describe('create', () => {
+    it('Should create a new instructor', async () => {
+      const createSpy = jest.spyOn(service, 'create');
+      const result = await service.create({
+        name: 'any_name',
+        email: 'any_email',
+      });
 
-    expect(createSpy).toHaveBeenCalledWith({
-      name: 'any_name',
-      email: 'any_email',
+      expect(createSpy).toHaveBeenCalledWith({
+        name: 'any_name',
+        email: 'any_email',
+      });
+      expect(result).toEqual(
+        expect.objectContaining({ name: 'any_name', email: 'any_email' }),
+      );
     });
-    expect(result).toEqual(
-      expect.objectContaining({ name: 'any_name', email: 'any_email' }),
-    );
   });
 
-  it('Should return a list of instructors', async () => {
-    const findAllSpy = jest.spyOn(service, 'findAll');
-    const result = await service.findAll();
+  describe('findAll', () => {
+    it('Should return a list of instructors', async () => {
+      const findAllSpy = jest.spyOn(service, 'findAll');
+      const result = await service.findAll();
 
-    expect(findAllSpy).toHaveBeenCalled();
-    expect(result).toEqual(expect.arrayContaining([instructorStub]));
+      expect(findAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.arrayContaining([instructorStub]));
+    });
   });
 
-  it('Should return an instructor with correct id', async () => {
-    const findOneSpy = jest.spyOn(service, 'findOne');
-    const result = await service.findOne('any_id');
+  describe('findOne', () => {
+    it('Should return an instructor with correct id', async () => {
+      const findOneSpy = jest.spyOn(service, 'findOne');
+      const result = await service.findOne('any_id');
 
-    expect(findOneSpy).toHaveBeenCalled();
-    expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+      expect(findOneSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+    });
   });
 });
