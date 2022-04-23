@@ -11,6 +11,8 @@ describe('InstructorsController', () => {
     id: 'stub_id',
     email: 'stub_email',
     name: 'stub_name',
+    created_at: undefined,
+    updated_at: undefined,
   };
 
   const instructorServiceMock = {

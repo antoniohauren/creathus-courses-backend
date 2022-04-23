@@ -6,11 +6,14 @@ import { InstructorsService } from '../instructors.service';
 
 describe('InstructorsService', () => {
   let service: InstructorsService;
+  let prisma: PrismaService;
 
   const instructorStub: Instructor = {
-    id: 'any_id',
-    email: 'any_email',
-    name: 'any_name',
+    id: 'stub_id',
+    email: 'stub_email',
+    name: 'stub_name',
+    created_at: undefined,
+    updated_at: undefined,
   };
 
   const PrismaServiceMock = {
@@ -41,6 +44,7 @@ describe('InstructorsService', () => {
     }).compile();
 
     service = module.get<InstructorsService>(InstructorsService);
+    prisma = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
@@ -50,11 +54,15 @@ describe('InstructorsService', () => {
   describe('create', () => {
     it('Should create a new instructor', async () => {
       const createSpy = jest.spyOn(service, 'create');
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockReturnValueOnce(null);
       const result = await service.create({
         name: 'any_name',
         email: 'any_email',
       });
 
+      expect(findUniqueSpy).toHaveBeenCalled();
       expect(createSpy).toHaveBeenCalledWith({
         name: 'any_name',
         email: 'any_email',
