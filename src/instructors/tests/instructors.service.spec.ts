@@ -24,6 +24,7 @@ describe('InstructorsService', () => {
         id: where.id,
         ...data,
       })),
+      delete: jest.fn(({ where }) => ({ ...instructorStub, id: where.id })),
     },
   };
 
@@ -94,6 +95,16 @@ describe('InstructorsService', () => {
       expect(result).toEqual(
         expect.objectContaining({ id: 'any_id', name: 'updated_name' }),
       );
+    });
+  });
+
+  describe('delete', () => {
+    it('Should return a deleted instructor', async () => {
+      const removeSpy = jest.spyOn(service, 'remove');
+      const result = await service.remove('any_id');
+
+      expect(removeSpy).toHaveBeenCalledWith('any_id');
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });
