@@ -107,6 +107,16 @@ describe('InstructorsService', () => {
         expect.objectContaining({ id: 'any_id', name: 'updated_name' }),
       );
     });
+
+    it('Should throw 404 if instructor not found', async () => {
+      const updateSpy = jest
+        .spyOn(service, 'update')
+        .mockRejectedValueOnce(new NotFoundException());
+      const promise = service.update('any_id', { name: 'updated_name' });
+
+      expect(updateSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrow(NotFoundException);
+    });
   });
 
   describe('delete', () => {
