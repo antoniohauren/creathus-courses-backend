@@ -27,7 +27,7 @@ export class InstructorsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} instructor`;
+  remove(id: string) {
+    return this.prisma.instructor.delete({ where: { id } });
   }
 }
