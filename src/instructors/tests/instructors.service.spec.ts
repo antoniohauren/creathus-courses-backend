@@ -6,7 +6,7 @@ import { InstructorsService } from '../instructors.service';
 describe('InstructorsService', () => {
   let service: InstructorsService;
 
-  const InstructorStub: Instructor = {
+  const instructorStub: Instructor = {
     id: 'any_id',
     email: 'any_email',
     name: 'any_name',
@@ -18,6 +18,7 @@ describe('InstructorsService', () => {
         id: 'any_id',
         ...data,
       })),
+      findMany: jest.fn(() => [instructorStub]),
     },
   };
 
@@ -46,9 +47,20 @@ describe('InstructorsService', () => {
       email: 'any_email',
     });
 
-    expect(createSpy).toBeCalledWith({ name: 'any_name', email: 'any_email' });
+    expect(createSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email',
+    });
     expect(result).toEqual(
       expect.objectContaining({ name: 'any_name', email: 'any_email' }),
     );
+  });
+
+  it('Should return a list of instructors', async () => {
+    const findAllSpy = jest.spyOn(service, 'findAll');
+    const result = await service.findAll();
+
+    expect(findAllSpy).toHaveBeenCalled();
+    expect(result).toEqual(expect.arrayContaining([instructorStub]));
   });
 });
