@@ -20,6 +20,10 @@ describe('InstructorsService', () => {
       })),
       findMany: jest.fn(() => [instructorStub]),
       findUnique: jest.fn(({ where }) => ({ ...instructorStub, id: where.id })),
+      update: jest.fn(({ where, data }) => ({
+        id: where.id,
+        ...data,
+      })),
     },
   };
 
@@ -76,6 +80,20 @@ describe('InstructorsService', () => {
 
       expect(findOneSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+    });
+  });
+
+  describe('update', () => {
+    it('Should return an updated instructor', async () => {
+      const updateSpy = jest.spyOn(service, 'update');
+      const result = await service.update('any_id', { name: 'updated_name' });
+
+      expect(updateSpy).toHaveBeenCalledWith('any_id', {
+        name: 'updated_name',
+      });
+      expect(result).toEqual(
+        expect.objectContaining({ id: 'any_id', name: 'updated_name' }),
+      );
     });
   });
 });
