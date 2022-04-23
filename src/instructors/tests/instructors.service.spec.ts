@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Instructor } from '../entities/instructor.entity';
@@ -70,6 +70,22 @@ describe('InstructorsService', () => {
       expect(result).toEqual(
         expect.objectContaining({ name: 'any_name', email: 'any_email' }),
       );
+    });
+
+    it('Should throw 400 if email is already in use', async () => {
+      const createSpy = jest.spyOn(service, 'create');
+
+      const promise = service.create({
+        name: 'any_name',
+        email: 'any_email',
+      });
+
+      expect(createSpy).toHaveBeenCalledWith({
+        name: 'any_name',
+        email: 'any_email',
+      });
+
+      expect(promise).rejects.toThrowError(BadRequestException);
     });
   });
 
