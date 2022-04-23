@@ -16,8 +16,8 @@ export class InstructorsService {
     return this.prisma.instructor.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} instructor`;
+  findOne(id: string) {
+    return this.prisma.instructor.findUnique({ where: { id } });
   }
 
   update(id: number, updateInstructorDto: UpdateInstructorDto) {

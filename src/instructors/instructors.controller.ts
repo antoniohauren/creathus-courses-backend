@@ -26,7 +26,7 @@ export class InstructorsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.instructorsService.findOne(+id);
+    return this.instructorsService.findOne(id);
   }
 
   @Patch(':id')
