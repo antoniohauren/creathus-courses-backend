@@ -35,7 +35,9 @@ export class InstructorsService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
+
     return this.prisma.instructor.delete({ where: { id } });
   }
 }
