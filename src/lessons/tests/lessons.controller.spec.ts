@@ -17,6 +17,7 @@ describe('LessonsController', () => {
 
   const lessonServiceMock = {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
+    findAll: jest.fn(() => [lessonStub]),
   };
 
   beforeEach(async () => {
@@ -47,6 +48,14 @@ describe('LessonsController', () => {
           duration: 50,
           instructor_email: 'any_email',
         }),
+      );
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return a list of lessons', () => {
+      expect(controller.findAll()).toEqual(
+        expect.arrayContaining([lessonStub]),
       );
     });
   });
