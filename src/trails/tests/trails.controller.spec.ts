@@ -14,6 +14,7 @@ describe('TrailsController', () => {
 
   const trailServiceMock = {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
+    findAll: jest.fn(() => [trailStub]),
   };
 
   beforeEach(async () => {
@@ -47,6 +48,12 @@ describe('TrailsController', () => {
           title: 'any_title',
         }),
       );
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return a list of trails', () => {
+      expect(controller.findAll()).toEqual(expect.arrayContaining([trailStub]));
     });
   });
 });
