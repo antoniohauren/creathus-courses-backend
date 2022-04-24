@@ -5,7 +5,12 @@ import { LessonsModule } from './lessons/lessons.module';
 import { TrailsModule } from './trails/trails.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), InstructorsModule, LessonsModule, TrailsModule],
+  imports: [
+    ConfigModule.forRoot(),
+    InstructorsModule,
+    LessonsModule,
+    TrailsModule,
+  ],
   controllers: [],
   providers: [],
 })
