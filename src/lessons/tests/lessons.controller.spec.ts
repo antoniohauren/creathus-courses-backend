@@ -19,6 +19,7 @@ describe('LessonsController', () => {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
     findAll: jest.fn(() => [lessonStub]),
     findOne: jest.fn((id) => ({ ...lessonStub, id })),
+    update: jest.fn((id, data) => ({ ...lessonStub, ...data, id })),
   };
 
   beforeEach(async () => {
@@ -65,6 +66,17 @@ describe('LessonsController', () => {
     it('Should return a lesson', () => {
       expect(controller.findOne('any_id')).toEqual(
         expect.objectContaining({ ...lessonStub, id: 'any_id' }),
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('Should return a updated lesson', () => {
+      expect(controller.update('any_id', { duration: 20 })).toEqual(
+        expect.objectContaining({
+          id: 'any_id',
+          duration: 20,
+        }),
       );
     });
   });
