@@ -26,7 +26,7 @@ export class TrailsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.trailsService.findOne(+id);
+    return this.trailsService.findOne(id);
   }
 
   @Patch(':id')
