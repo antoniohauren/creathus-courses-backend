@@ -31,7 +31,7 @@ export class LessonsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonsService.update(+id, updateLessonDto);
+    return this.lessonsService.update(id, updateLessonDto);
   }
 
   @Delete(':id')

@@ -41,8 +41,33 @@ export class LessonsService {
     return result;
   }
 
-  update(id: number, updateLessonDto: UpdateLessonDto) {
-    return `This action updates a #${id} lesson`;
+  async update(id: string, updateLessonDto: UpdateLessonDto) {
+    await this.findOne(id);
+
+    if (!updateLessonDto.instructor_email) {
+      return this.prisma.lesson.update({
+        where: { id },
+        data: updateLessonDto,
+      });
+    }
+
+    const instructor = await this.prisma.instructor.findUnique({
+      where: { email: updateLessonDto.instructor_email },
+    });
+
+    if (!instructor) throw new BadRequestException('Instructor not found');
+
+    return this.prisma.lesson.update({
+      where: { id },
+      data: {
+        duration: updateLessonDto.duration,
+        instructor: {
+          connect: {
+            id: instructor.id,
+          },
+        },
+      },
+    });
   }
 
   remove(id: number) {
