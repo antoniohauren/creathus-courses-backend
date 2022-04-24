@@ -79,6 +79,7 @@ describe('InstructorsService', () => {
       const promise = service.create({
         name: 'any_name',
         email: 'any_email',
+        //
       });
 
       expect(createSpy).toHaveBeenCalledWith({
@@ -110,12 +111,12 @@ describe('InstructorsService', () => {
     });
 
     it('Should throw 404 if instructor not found', async () => {
-      const findOneSpy = jest
-        .spyOn(service, 'findOne')
-        .mockRejectedValueOnce(new NotFoundException());
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockResolvedValueOnce(null);
       const promise = service.findOne('any_id');
 
-      expect(findOneSpy).toHaveBeenCalled();
+      expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrow(NotFoundException);
     });
   });
