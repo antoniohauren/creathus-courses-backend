@@ -34,6 +34,7 @@ describe('LessonsService', () => {
         instructor_id: `any_instructor_id`,
       })),
       findMany: jest.fn(() => [lessonStub]),
+      findUnique: jest.fn(({ where }) => ({ ...lessonStub, id: where.id })),
     },
     instructor: {
       findUnique: jest.fn(() => ({ ...instructorStub })),
@@ -109,6 +110,16 @@ describe('LessonsService', () => {
 
       expect(finsAllSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.arrayContaining([lessonStub]));
+    });
+  });
+
+  describe('findOne', () => {
+    it('Should return a lesson with correct id', async () => {
+      const findOneSpy = jest.spyOn(service, 'findOne');
+      const result = await service.findOne('any_id');
+
+      expect(findOneSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });
