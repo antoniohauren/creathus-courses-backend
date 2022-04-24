@@ -174,6 +174,21 @@ describe('LessonsService', () => {
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrow(NotFoundException);
     });
+
+    it('Should throw 400 if email is provided is invalid', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockReturnValueOnce(null);
+      const promise = service.update('id', {
+        instructor_email: 'invalid_email',
+      });
+      expect(findUniqueSpy).toBeCalled();
+      expect(promise).rejects.toThrowError(
+        new BadRequestException(
+          'Não foi encontrado Nenhum instrutor com esse email!',
+        ),
+      );
+    });
   });
 
   describe('remove', () => {
