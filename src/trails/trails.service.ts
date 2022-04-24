@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Trail } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTrailDto, UpdateTrailDto } from './dtos';
 
@@ -12,8 +13,29 @@ export class TrailsService {
     });
   }
 
-  findAll() {
-    return this.prisma.trail.findMany();
+  async findAll() {
+    const result = await this.prisma.trail.findMany({
+      include: {
+        lessons: {
+          include: {
+            instructor: true,
+          },
+        },
+      },
+    });
+
+    const trails = result.map(({ lessons, ...trail }) => {
+      return {
+        ...trail,
+        instructors: lessons.reduce((pv, { instructor: { name } }) => {
+          return [...pv.filter(() => !pv.includes(name)), name];
+        }, []),
+        lession_count: lessons.length,
+        total_duration: lessons.reduce((pv, cv) => pv + cv.duration, 0),
+      };
+    });
+
+    return trails;
   }
 
   async findOne(id: string) {
