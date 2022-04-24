@@ -31,9 +31,7 @@ export class InstructorsService {
   async findOne(id: string) {
     const result = await this.prisma.instructor.findUnique({ where: { id } });
 
-    if (!result) {
-      throw new NotFoundException('User not found!');
-    }
+    if (!result) throw new NotFoundException('Instructor not found!');
 
     return result;
   }
