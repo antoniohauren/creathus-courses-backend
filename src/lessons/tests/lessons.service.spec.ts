@@ -39,6 +39,7 @@ describe('LessonsService', () => {
         id: where.id,
         ...data,
       })),
+      delete: jest.fn(({ where }) => ({ ...lessonStub, id: where.id })),
     },
     instructor: {
       findUnique: jest.fn(() => ({ ...instructorStub })),
@@ -148,7 +149,7 @@ describe('LessonsService', () => {
       );
     });
 
-    it('Should throw 404 if instructor not found', async () => {
+    it('Should throw 404 if lesson not found', async () => {
       const updateSpy = jest
         .spyOn(service, 'update')
         .mockRejectedValueOnce(new NotFoundException());
@@ -156,6 +157,16 @@ describe('LessonsService', () => {
 
       expect(updateSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('remove', () => {
+    it('Should return a deleted lesson', async () => {
+      const removeSpy = jest.spyOn(service, 'remove');
+      const result = await service.remove('any_id');
+
+      expect(removeSpy).toHaveBeenCalledWith('any_id');
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });
