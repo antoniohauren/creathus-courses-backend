@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLessonDto, UpdateLessonDto } from './dtos';
 
@@ -29,8 +33,12 @@ export class LessonsService {
     return this.prisma.lesson.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} lesson`;
+  async findOne(id: string) {
+    const result = await this.prisma.lesson.findUnique({ where: { id } });
+
+    if (!result) throw new NotFoundException('Lesson not found!');
+
+    return result;
   }
 
   update(id: number, updateLessonDto: UpdateLessonDto) {
