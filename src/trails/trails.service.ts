@@ -33,7 +33,8 @@ export class TrailsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} trail`;
+  async remove(id: string) {
+    await this.findOne(id);
+    return this.prisma.trail.delete({ where: { id } });
   }
 }

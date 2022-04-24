@@ -36,6 +36,6 @@ export class TrailsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.trailsService.remove(+id);
+    return this.trailsService.remove(id);
   }
 }
