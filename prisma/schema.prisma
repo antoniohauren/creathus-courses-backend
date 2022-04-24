@@ -15,9 +15,24 @@ model Instructor {
   name  String
   email String
 
+  Lesson Lesson[]
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 
   @@unique([email])
   @@map("instructors")
+}
+
+model Lesson {
+  id       String @id @default(uuid())
+  duration Int
+
+  instructor    Instructor @relation(fields: [instructor_id], references: [id])
+  instructor_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+
+  @@map("lessons")
 }
