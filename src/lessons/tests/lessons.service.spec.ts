@@ -144,7 +144,6 @@ describe('LessonsService', () => {
     it('Should return an updated lesson', async () => {
       const updateSpy = jest.spyOn(service, 'update');
       const result = await service.update('any_id', { duration: 50 });
-
       expect(updateSpy).toHaveBeenCalledWith('any_id', { duration: 50 });
       expect(result).toEqual(
         expect.objectContaining({ id: 'any_id', duration: 50 }),
@@ -153,41 +152,42 @@ describe('LessonsService', () => {
 
     it('Should throw 404 if lesson not found', async () => {
       const updateSpy = jest
-        .spyOn(service, 'update')
-        .mockRejectedValueOnce(new NotFoundException());
+        .spyOn(service, 'findOne')
+        .mockRejectedValueOnce(new NotFoundException('Aula não encontrada!'));
       const promise = service.update('any_id', { duration: 0 });
 
       expect(updateSpy).toHaveBeenCalled();
-      expect(promise).rejects.toThrow(NotFoundException);
+      expect(promise).rejects.toThrowError(
+        new NotFoundException('Aula não encontrada!'),
+      );
     });
 
     it('Should throw 404 if instructor not found', async () => {
-      const updateSpy = jest
-        .spyOn(service, 'update')
-        .mockRejectedValueOnce(new NotFoundException());
-      const findUniqueSpy = jest
-        .spyOn(prisma.instructor, 'findUnique')
-        .mockResolvedValueOnce(null);
-      const promise = service.update('any_id', { duration: 0 });
+      jest.spyOn(prisma.instructor, 'findUnique').mockResolvedValueOnce(null);
 
-      expect(updateSpy).toHaveBeenCalled();
-      expect(findUniqueSpy).toHaveBeenCalled();
-      expect(promise).rejects.toThrow(NotFoundException);
-    });
-
-    it('Should throw 400 if email is provided is invalid', async () => {
-      const findUniqueSpy = jest
-        .spyOn(prisma.instructor, 'findUnique')
-        .mockReturnValueOnce(null);
-      const promise = service.update('id', {
-        instructor_email: 'invalid_email',
+      const promise = service.update('any_id', {
+        duration: 0,
+        instructor_email: 'any_email',
       });
-      expect(findUniqueSpy).toBeCalled();
+
       expect(promise).rejects.toThrowError(
         new BadRequestException(
           'Não foi encontrado Nenhum instrutor com esse email!',
         ),
       );
+    });
+
+    it('Should update if valid email is provided', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockResolvedValueOnce(instructorStub);
+
+      const result = await service.update('any_id', {
+        instructor_email: 'any_email',
+      });
+
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 
