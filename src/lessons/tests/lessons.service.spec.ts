@@ -158,6 +158,20 @@ describe('LessonsService', () => {
       expect(updateSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrow(NotFoundException);
     });
+
+    it('Should throw 404 if instructor not found', async () => {
+      const updateSpy = jest
+        .spyOn(service, 'update')
+        .mockRejectedValueOnce(new NotFoundException());
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockResolvedValueOnce(null);
+      const promise = service.update('any_id', { duration: 0 });
+
+      expect(updateSpy).toHaveBeenCalled();
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrow(NotFoundException);
+    });
   });
 
   describe('remove', () => {
