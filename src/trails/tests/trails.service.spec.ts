@@ -111,6 +111,18 @@ describe('TrailsService', () => {
       expect(findOneSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
+
+    it('Should throw 404 if trail not found', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.trail, 'findUnique')
+        .mockResolvedValueOnce(null);
+      const promise = service.findOne('any_id');
+
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new NotFoundException('Trilha não encontrada!'),
+      );
+    });
   });
 
   describe('update', () => {
@@ -125,6 +137,20 @@ describe('TrailsService', () => {
         expect.objectContaining({ id: 'any_id', title: 'updated_title' }),
       );
     });
+
+    it('Should throw 404 if trail not found', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.trail, 'findUnique')
+        .mockResolvedValueOnce(null);
+      const promise = service.update('any_id', {
+        title: 'updated_title',
+      });
+
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new NotFoundException('Trilha não encontrada!'),
+      );
+    });
   });
 
   describe('remove', () => {
@@ -134,6 +160,18 @@ describe('TrailsService', () => {
 
       expect(removeSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+    });
+
+    it('Should throw 404 if trail not found', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.trail, 'findUnique')
+        .mockResolvedValueOnce(null);
+      const promise = service.remove('any_id');
+
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new NotFoundException('Trilha não encontrada!'),
+      );
     });
   });
 });
