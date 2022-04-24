@@ -4,6 +4,6 @@ import { LessonsController } from './lessons.controller';
 
 @Module({
   controllers: [LessonsController],
-  providers: [LessonsService]
+  providers: [LessonsService],
 })
 export class LessonsModule {}
