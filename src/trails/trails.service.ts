@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateTrailDto, UpdateTrailDto } from './dtos';
 
 @Injectable()
 export class TrailsService {
+  constructor(private prisma: PrismaService) {}
+
   create(createTrailDto: CreateTrailDto) {
     return 'This action adds a new trail';
   }
