@@ -1,10 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateLessonDto, UpdateLessonDto } from './dtos';
 
 @Injectable()
 export class LessonsService {
-  create(createLessonDto: CreateLessonDto) {
-    return 'This action adds a new lesson';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createLessonDto: CreateLessonDto) {
+    const instructor = await this.prisma.instructor.findUnique({
+      where: { email: createLessonDto.instructor_email },
+    });
+
+    if (!instructor) throw new BadRequestException('Instructor not found');
+
+    return this.prisma.lesson.create({
+      data: {
+        duration: createLessonDto.duration,
+        instructor: {
+          connect: {
+            id: instructor.id,
+          },
+        },
+      },
+    });
   }
 
   findAll() {
