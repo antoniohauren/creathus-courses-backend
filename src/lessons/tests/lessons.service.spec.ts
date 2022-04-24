@@ -168,5 +168,15 @@ describe('LessonsService', () => {
       expect(removeSpy).toHaveBeenCalledWith('any_id');
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
+
+    it('Should throw 404 if lesson not found', async () => {
+      const removeSpy = jest
+        .spyOn(service, 'remove')
+        .mockRejectedValueOnce(new NotFoundException());
+      const promise = service.remove('any_id');
+
+      expect(removeSpy).toHaveBeenCalledWith('any_id');
+      expect(promise).rejects.toThrow(NotFoundException);
+    });
   });
 });

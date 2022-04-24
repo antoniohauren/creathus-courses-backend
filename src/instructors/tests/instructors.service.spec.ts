@@ -159,7 +159,7 @@ describe('InstructorsService', () => {
         .mockRejectedValueOnce(new NotFoundException());
       const promise = service.remove('any_id');
 
-      expect(removeSpy).toHaveBeenCalled();
+      expect(removeSpy).toHaveBeenCalledWith('any_id');
       expect(promise).rejects.toThrow(NotFoundException);
     });
   });
