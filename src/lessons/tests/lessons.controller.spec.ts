@@ -20,6 +20,7 @@ describe('LessonsController', () => {
     findAll: jest.fn(() => [lessonStub]),
     findOne: jest.fn((id) => ({ ...lessonStub, id })),
     update: jest.fn((id, data) => ({ ...lessonStub, ...data, id })),
+    remove: jest.fn((id) => ({ ...lessonStub, id })),
   };
 
   beforeEach(async () => {
@@ -76,6 +77,16 @@ describe('LessonsController', () => {
         expect.objectContaining({
           id: 'any_id',
           duration: 20,
+        }),
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('Should return a removed lesson', () => {
+      expect(controller.remove('any_id')).toEqual(
+        expect.objectContaining({
+          id: 'any_id',
         }),
       );
     });
