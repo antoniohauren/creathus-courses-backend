@@ -7,7 +7,9 @@ export class TrailsService {
   constructor(private prisma: PrismaService) {}
 
   create(createTrailDto: CreateTrailDto) {
-    return 'This action adds a new trail';
+    return this.prisma.trail.create({
+      data: createTrailDto,
+    });
   }
 
   findAll() {
