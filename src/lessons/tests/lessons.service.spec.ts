@@ -147,5 +147,15 @@ describe('LessonsService', () => {
         expect.objectContaining({ id: 'any_id', duration: 50 }),
       );
     });
+
+    it('Should throw 404 if instructor not found', async () => {
+      const updateSpy = jest
+        .spyOn(service, 'update')
+        .mockRejectedValueOnce(new NotFoundException());
+      const promise = service.update('any_id', { duration: 0 });
+
+      expect(updateSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrow(NotFoundException);
+    });
   });
 });
