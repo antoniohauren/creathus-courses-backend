@@ -17,6 +17,7 @@ describe('TrailsController', () => {
     findAll: jest.fn(() => [trailStub]),
     findOne: jest.fn((id) => ({ ...trailStub, id })),
     update: jest.fn((id, data) => ({ ...trailStub, ...data, id })),
+    remove: jest.fn((id) => ({ ...trailStub, id })),
   };
 
   beforeEach(async () => {
@@ -73,6 +74,16 @@ describe('TrailsController', () => {
         expect.objectContaining({
           id: 'any_id',
           title: 'any_title',
+        }),
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('Should return a removed trails', () => {
+      expect(controller.remove('any_id')).toEqual(
+        expect.objectContaining({
+          id: 'any_id',
         }),
       );
     });
