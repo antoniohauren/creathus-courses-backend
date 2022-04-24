@@ -1,14 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../../prisma/prisma.service';
+import { Lesson } from '../entities/lesson.entity';
 import { LessonsController } from '../lessons.controller';
 import { LessonsService } from '../lessons.service';
 
 describe('LessonsController', () => {
   let controller: LessonsController;
 
+  const lessonStub: Lesson = {
+    id: 'any_id',
+    duration: 0,
+    instructor_id: 'any_instructor_id',
+    created_at: undefined,
+    updated_at: undefined,
+  };
+
+  const lessonServiceMock = {
+    create: jest.fn((data) => ({ id: 'any_id', ...data })),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [LessonsController],
-      providers: [LessonsService],
+      providers: [
+        {
+          provide: LessonsService,
+          useValue: lessonServiceMock,
+        },
+        PrismaService,
+      ],
     }).compile();
 
     controller = module.get<LessonsController>(LessonsController);
@@ -16,5 +36,18 @@ describe('LessonsController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('Should create a new lesson', () => {
+      expect(
+        controller.create({ duration: 50, instructor_email: 'any_email' }),
+      ).toEqual(
+        expect.objectContaining({
+          duration: 50,
+          instructor_email: 'any_email',
+        }),
+      );
+    });
   });
 });
