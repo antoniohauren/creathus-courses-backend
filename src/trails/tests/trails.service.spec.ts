@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Trail } from '../entities/trail.entity';
@@ -5,6 +6,7 @@ import { TrailsService } from '../trails.service';
 
 describe('TrailsService', () => {
   let service: TrailsService;
+  let prisma: PrismaService;
 
   const trailStub: Partial<Trail> = {
     id: 'stub_id',
@@ -33,6 +35,7 @@ describe('TrailsService', () => {
         ...data,
         id: where.id,
       })),
+      delete: jest.fn(({ where }) => ({ ...trailStub, id: where.id })),
     },
   };
 
@@ -48,6 +51,7 @@ describe('TrailsService', () => {
     }).compile();
 
     service = module.get<TrailsService>(TrailsService);
+    prisma = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
@@ -120,6 +124,16 @@ describe('TrailsService', () => {
       expect(result).toEqual(
         expect.objectContaining({ id: 'any_id', title: 'updated_title' }),
       );
+    });
+  });
+
+  describe('remove', () => {
+    it('Should return a deleted trail', async () => {
+      const removeSpy = jest.spyOn(service, 'remove');
+      const result = await service.remove('any_id');
+
+      expect(removeSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });
