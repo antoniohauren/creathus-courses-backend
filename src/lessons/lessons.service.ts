@@ -26,7 +26,7 @@ export class LessonsService {
   }
 
   findAll() {
-    return `This action returns all lessons`;
+    return this.prisma.lesson.findMany();
   }
 
   findOne(id: number) {
