@@ -38,7 +38,7 @@ describe('TrailsController', () => {
   describe('create', () => {
     const fakeDate = new Date();
 
-    it('Should create a new lesson', () => {
+    it('Should create a new trails', () => {
       expect(
         controller.create({
           title: 'any_title',
@@ -60,7 +60,7 @@ describe('TrailsController', () => {
   });
 
   describe('findOne', () => {
-    it('Should return a lesson', () => {
+    it('Should return a trails', () => {
       expect(controller.findOne('any_id')).toEqual(
         expect.objectContaining({ ...trailStub, id: 'any_id' }),
       );
@@ -68,7 +68,7 @@ describe('TrailsController', () => {
   });
 
   describe('update', () => {
-    it('Should return a updated lesson', () => {
+    it('Should return a updated trails', () => {
       expect(controller.update('any_id', { title: 'any_title' })).toEqual(
         expect.objectContaining({
           id: 'any_id',
