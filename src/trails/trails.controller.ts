@@ -31,7 +31,7 @@ export class TrailsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTrailDto: UpdateTrailDto) {
-    return this.trailsService.update(+id, updateTrailDto);
+    return this.trailsService.update(id, updateTrailDto);
   }
 
   @Delete(':id')

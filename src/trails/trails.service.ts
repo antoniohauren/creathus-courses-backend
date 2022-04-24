@@ -24,8 +24,13 @@ export class TrailsService {
     return result;
   }
 
-  update(id: number, updateTrailDto: UpdateTrailDto) {
-    return `This action updates a #${id} trail`;
+  async update(id: string, updateTrailDto: UpdateTrailDto) {
+    await this.findOne(id);
+
+    return this.prisma.trail.update({
+      where: { id },
+      data: updateTrailDto,
+    });
   }
 
   remove(id: number) {
