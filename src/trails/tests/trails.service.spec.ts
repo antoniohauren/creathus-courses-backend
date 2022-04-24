@@ -4,6 +4,7 @@ import { TrailsService } from '../trails.service';
 
 describe('TrailsService', () => {
   let service: TrailsService;
+  //
 
   const PrismaServiceMock = {
     trail: {
@@ -11,6 +12,16 @@ describe('TrailsService', () => {
         id: 'any_id',
         ...data,
       })),
+      findMany: jest.fn().mockImplementation(() => {
+        return [
+          {
+            lessons: [
+              { instructor: { name: 'instructor_name' }, duration: 10 },
+              { instructor: { name: 'instructor_name' }, duration: 20 },
+            ],
+          },
+        ];
+      }),
     },
   };
 
@@ -55,6 +66,24 @@ describe('TrailsService', () => {
           start_date: fakeDate,
           end_date: fakeDate,
         }),
+      );
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return trials information', async () => {
+      const findAllSpy = jest.spyOn(service, 'findAll');
+      const result = await service.findAll();
+
+      expect(findAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            instructors: ['instructor_name'],
+            lession_count: 2,
+            total_duration: 30,
+          }),
+        ]),
       );
     });
   });
