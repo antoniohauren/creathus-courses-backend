@@ -128,13 +128,15 @@ describe('LessonsService', () => {
     });
 
     it('Should return 404 if lesson not found', async () => {
-      const findOneSpy = jest
-        .spyOn(service, 'findOne')
-        .mockRejectedValueOnce(new NotFoundException());
+      const findUniqueSpy = jest
+        .spyOn(prisma.lesson, 'findUnique')
+        .mockReturnValueOnce(null);
       const promise = service.findOne('any_id');
 
-      expect(findOneSpy).toHaveBeenCalled();
-      expect(promise).rejects.toThrow(NotFoundException);
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new NotFoundException('Aula não encontrada!'),
+      );
     });
   });
 
