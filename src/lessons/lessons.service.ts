@@ -15,7 +15,10 @@ export class LessonsService {
       where: { email: createLessonDto.instructor_email },
     });
 
-    if (!instructor) throw new BadRequestException('Instructor not found');
+    if (!instructor)
+      throw new BadRequestException(
+        'Não foi encontrado Nenhum instrutor com esse email!',
+      );
 
     return this.prisma.lesson.create({
       data: {
@@ -36,7 +39,7 @@ export class LessonsService {
   async findOne(id: string) {
     const result = await this.prisma.lesson.findUnique({ where: { id } });
 
-    if (!result) throw new NotFoundException('Lesson not found!');
+    if (!result) throw new NotFoundException('Aula não encontrada!');
 
     return result;
   }
@@ -55,7 +58,10 @@ export class LessonsService {
       where: { email: updateLessonDto.instructor_email },
     });
 
-    if (!instructor) throw new BadRequestException('Instructor not found');
+    if (!instructor)
+      throw new BadRequestException(
+        'Não foi encontrado Nenhum instrutor com esse email!',
+      );
 
     return this.prisma.lesson.update({
       where: { id },
