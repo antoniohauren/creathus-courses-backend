@@ -11,13 +11,30 @@ datasource db {
 }
 
 model Instructor {
-  id    String @id @default(uuid())
-  name  String
-  email String
-
+  // Fields
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  // Relations
+  Lesson     Lesson[]
+  // Generated
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 
   @@unique([email])
   @@map("instructors")
+}
+
+model Lesson {
+  // Fields
+  id            String     @id @default(uuid())
+  duration      Int
+  // Relations
+  instructor    Instructor @relation(fields: [instructor_id], references: [id])
+  instructor_id String
+  // Generated
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt()
+
+  @@map("lessons")
 }

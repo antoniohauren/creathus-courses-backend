@@ -16,7 +16,7 @@ export class InstructorsService {
     });
 
     if (result) {
-      throw new BadRequestException('Email already in use!');
+      throw new BadRequestException('Email já está em uso!');
     }
 
     return this.prisma.instructor.create({
@@ -31,9 +31,7 @@ export class InstructorsService {
   async findOne(id: string) {
     const result = await this.prisma.instructor.findUnique({ where: { id } });
 
-    if (!result) {
-      throw new NotFoundException('User not found!');
-    }
+    if (!result) throw new NotFoundException('Instrutor não encontrado!');
 
     return result;
   }

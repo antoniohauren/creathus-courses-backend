@@ -11,6 +11,7 @@ describe('InstructorsController', () => {
     id: 'stub_id',
     email: 'stub_email',
     name: 'stub_name',
+    lessons: null,
     created_at: undefined,
     updated_at: undefined,
   };
