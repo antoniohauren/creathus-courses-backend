@@ -28,6 +28,11 @@ describe('TrailsService', () => {
         ];
       }),
       findUnique: jest.fn(({ where }) => ({ ...trailStub, id: where.id })),
+      update: jest.fn(({ where, data }) => ({
+        ...trailStub,
+        ...data,
+        id: where.id,
+      })),
     },
   };
 
@@ -101,6 +106,20 @@ describe('TrailsService', () => {
 
       expect(findOneSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
+    });
+  });
+
+  describe('update', () => {
+    it('Should return an updated trail', async () => {
+      const updateSpy = jest.spyOn(service, 'update');
+      const result = await service.update('any_id', {
+        title: 'updated_title',
+      });
+
+      expect(updateSpy).toHaveBeenCalled();
+      expect(result).toEqual(
+        expect.objectContaining({ id: 'any_id', title: 'updated_title' }),
+      );
     });
   });
 });
