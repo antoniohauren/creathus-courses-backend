@@ -70,7 +70,8 @@ export class LessonsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} lesson`;
+  async remove(id: string) {
+    await this.findOne(id);
+    return this.prisma.lesson.delete({ where: { id } });
   }
 }
