@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Instructor } from '../../instructors/entities/instructor.entity';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -70,6 +71,24 @@ describe('LessonsService', () => {
           instructor_id: 'any_instructor_id',
         }),
       );
+    });
+
+    it('Should throw 400 if instructor not found', async () => {
+      const createSpy = jest.spyOn(service, 'create');
+      const findUniqueSpy = jest
+        .spyOn(prisma.instructor, 'findUnique')
+        .mockReturnValueOnce(null);
+      const promise = service.create({
+        duration: 30,
+        instructor_email: 'invalid_email@mail.com',
+      });
+
+      expect(createSpy).toHaveBeenCalledWith({
+        duration: 30,
+        instructor_email: 'invalid_email@mail.com',
+      });
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(BadRequestException);
     });
   });
 });
