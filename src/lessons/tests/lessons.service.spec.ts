@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Instructor } from '../../instructors/entities/instructor.entity';
 import { PrismaService } from '../../prisma/prisma.service';
+import { Lesson } from '../entities/lesson.entity';
 import { LessonsService } from '../lessons.service';
 
 describe('LessonsService', () => {
@@ -17,6 +18,14 @@ describe('LessonsService', () => {
     updated_at: undefined,
   };
 
+  const lessonStub: Lesson = {
+    id: 'any_id',
+    duration: 0,
+    instructor_id: 'any_instructor_id',
+    created_at: undefined,
+    updated_at: undefined,
+  };
+
   const PrismaServiceMock = {
     lesson: {
       create: jest.fn(({ data }) => ({
@@ -24,6 +33,7 @@ describe('LessonsService', () => {
         duration: data.duration,
         instructor_id: `any_instructor_id`,
       })),
+      findMany: jest.fn(() => [lessonStub]),
     },
     instructor: {
       findUnique: jest.fn(() => ({ ...instructorStub })),
@@ -89,6 +99,16 @@ describe('LessonsService', () => {
       });
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrowError(BadRequestException);
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return a list of lessons', async () => {
+      const finsAllSpy = jest.spyOn(service, 'findAll');
+      const result = await service.findAll();
+
+      expect(finsAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.arrayContaining([lessonStub]));
     });
   });
 });

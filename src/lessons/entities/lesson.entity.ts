@@ -1,10 +1,8 @@
-import { Instructor } from '../../instructors/entities/instructor.entity';
-
 export class Lesson {
   id: string;
   duration: number;
 
-  instructor: Instructor;
+  instructor_id: string;
 
   created_at: Date;
   updated_at: Date;
