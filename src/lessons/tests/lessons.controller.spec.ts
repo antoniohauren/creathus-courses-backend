@@ -12,8 +12,6 @@ describe('LessonsController', () => {
     duration: 0,
     instructor_id: 'any_instructor_id',
     trail_id: 'any_trail_id',
-    created_at: undefined,
-    updated_at: undefined,
   };
 
   const lessonServiceMock = {
