@@ -7,12 +7,11 @@ import { LessonsService } from '../lessons.service';
 describe('LessonsController', () => {
   let controller: LessonsController;
 
-  const lessonStub: Lesson = {
+  const lessonStub: Partial<Lesson> = {
     id: 'any_id',
     duration: 0,
     instructor_id: 'any_instructor_id',
-    created_at: undefined,
-    updated_at: undefined,
+    trail_id: 'any_trail_id',
   };
 
   const lessonServiceMock = {

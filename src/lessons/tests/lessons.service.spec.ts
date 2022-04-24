@@ -13,17 +13,16 @@ describe('LessonsService', () => {
     id: 'stub_id',
     email: 'stub_email',
     name: 'stub_name',
-    lessons: null,
+    lessons: [],
     created_at: undefined,
     updated_at: undefined,
   };
 
-  const lessonStub: Lesson = {
+  const lessonStub: Partial<Lesson> = {
     id: 'any_id',
     duration: 0,
     instructor_id: 'any_instructor_id',
-    created_at: undefined,
-    updated_at: undefined,
+    trail_id: 'any_trail_id',
   };
 
   const PrismaServiceMock = {
@@ -42,7 +41,7 @@ describe('LessonsService', () => {
       delete: jest.fn(({ where }) => ({ ...lessonStub, id: where.id })),
     },
     instructor: {
-      findUnique: jest.fn(() => ({ ...instructorStub })),
+      findUnique: jest.fn(({ where }) => ({ ...instructorStub, id: where.id })),
     },
   };
 

@@ -7,13 +7,10 @@ import { InstructorsService } from '../instructors.service';
 describe('InstructorsController', () => {
   let controller: InstructorsController;
 
-  const instructorStub: Instructor = {
+  const instructorStub: Partial<Instructor> = {
     id: 'stub_id',
     email: 'stub_email',
     name: 'stub_name',
-    lessons: null,
-    created_at: undefined,
-    updated_at: undefined,
   };
 
   const instructorServiceMock = {
