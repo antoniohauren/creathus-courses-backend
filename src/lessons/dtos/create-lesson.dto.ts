@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsPositive } from 'class-validator';
+import { IsEmail, IsNumber, IsPositive, IsUUID } from 'class-validator';
 
 export class CreateLessonDto {
   @IsNumber()
@@ -7,4 +7,7 @@ export class CreateLessonDto {
 
   @IsEmail()
   instructor_email: string;
+
+  @IsUUID()
+  course_id: string;
 }

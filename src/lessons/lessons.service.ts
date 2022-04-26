@@ -20,12 +20,26 @@ export class LessonsService {
         'Não foi encontrado Nenhum instrutor com esse email!',
       );
 
+    const course = await this.prisma.course.findUnique({
+      where: { id: createLessonDto.course_id },
+    });
+
+    if (!course)
+      throw new BadRequestException(
+        'Não foi encontrado Nenhum curso com esse ID!',
+      );
+
     return this.prisma.lesson.create({
       data: {
         duration: createLessonDto.duration,
         instructor: {
           connect: {
             id: instructor.id,
+          },
+        },
+        course: {
+          connect: {
+            id: course.id,
           },
         },
       },

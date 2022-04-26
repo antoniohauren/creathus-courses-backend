@@ -1,5 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Course } from '../../courses/entities/courses.entity';
 import { Instructor } from '../../instructors/entities/instructor.entity';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Lesson } from '../entities/lesson.entity';
@@ -8,6 +9,11 @@ import { LessonsService } from '../lessons.service';
 describe('LessonsService', () => {
   let service: LessonsService;
   let prisma: PrismaService;
+
+  const courseStub: Partial<Course> = {
+    id: 'stub_id',
+    title: 'stub_title',
+  };
 
   const instructorStub: Instructor = {
     id: 'stub_id',
@@ -43,6 +49,9 @@ describe('LessonsService', () => {
     instructor: {
       findUnique: jest.fn(({ where }) => ({ ...instructorStub, id: where.id })),
     },
+    course: {
+      findUnique: jest.fn(({ where }) => ({ ...courseStub, id: where.id })),
+    },
   };
 
   beforeEach(async () => {
@@ -72,12 +81,14 @@ describe('LessonsService', () => {
       const result = await service.create({
         duration: 30,
         instructor_email: 'any_email@mail.com',
+        course_id: 'course_id',
       });
 
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(createSpy).toHaveBeenCalledWith({
         duration: 30,
         instructor_email: 'any_email@mail.com',
+        course_id: 'course_id',
       });
 
       expect(result).toEqual(
@@ -96,14 +107,42 @@ describe('LessonsService', () => {
       const promise = service.create({
         duration: 30,
         instructor_email: 'invalid_email@mail.com',
+        course_id: 'course_id',
       });
 
       expect(createSpy).toHaveBeenCalledWith({
         duration: 30,
         instructor_email: 'invalid_email@mail.com',
+        course_id: 'course_id',
       });
       expect(findUniqueSpy).toHaveBeenCalled();
-      expect(promise).rejects.toThrowError(BadRequestException);
+      expect(promise).rejects.toThrowError(
+        new BadRequestException(
+          'Não foi encontrado Nenhum instrutor com esse email!',
+        ),
+      );
+    });
+
+    it('Should throw 400 if course not found', async () => {
+      const createSpy = jest.spyOn(service, 'create');
+      const findUniqueSpy = jest
+        .spyOn(prisma.course, 'findUnique')
+        .mockReturnValueOnce(null);
+      const promise = service.create({
+        duration: 30,
+        instructor_email: 'invalid_email@mail.com',
+        course_id: 'course_id',
+      });
+
+      expect(createSpy).toHaveBeenCalledWith({
+        duration: 30,
+        instructor_email: 'invalid_email@mail.com',
+        course_id: 'course_id',
+      });
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new BadRequestException('Não foi encontrado Nenhum curso com esse ID!'),
+      );
     });
   });
 

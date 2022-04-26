@@ -44,7 +44,11 @@ describe('LessonsController', () => {
   describe('create', () => {
     it('Should create a new lesson', () => {
       expect(
-        controller.create({ duration: 50, instructor_email: 'any_email' }),
+        controller.create({
+          duration: 50,
+          instructor_email: 'any_email',
+          course_id: 'any_id',
+        }),
       ).toEqual(
         expect.objectContaining({
           duration: 50,
