@@ -31,9 +31,9 @@ model Lesson {
   duration      Int
   // Relations
   instructor    Instructor @relation(fields: [instructor_id], references: [id])
-  trail         Trail?     @relation(fields: [trail_id], references: [id])
+  course        Course?    @relation(fields: [course_id], references: [id])
   instructor_id String
-  trail_id      String?
+  course_id     String?
   // Generated
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt()
@@ -41,7 +41,7 @@ model Lesson {
   @@map("lessons")
 }
 
-model Trail {
+model Course {
   // Fields
   id         String   @id @default(uuid())
   title      String
@@ -53,5 +53,5 @@ model Trail {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 
-  @@map("trails")
+  @@map("courses")
 }

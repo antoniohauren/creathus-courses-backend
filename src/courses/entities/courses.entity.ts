@@ -1,4 +1,4 @@
-export class Trail {
+export class Course {
   id: string;
   title: string;
   start_date: Date;

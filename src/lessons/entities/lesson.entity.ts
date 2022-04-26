@@ -3,7 +3,7 @@ export class Lesson {
   duration: number;
 
   instructor_id: string;
-  trail_id: string;
+  course_id: string;
 
   created_at: Date;
   updated_at: Date;

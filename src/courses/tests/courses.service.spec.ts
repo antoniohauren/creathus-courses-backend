@@ -1,20 +1,20 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Trail } from '../entities/trail.entity';
-import { TrailsService } from '../trails.service';
+import { Course } from '../entities/courses.entity';
+import { CoursesService } from '../courses.service';
 
-describe('TrailsService', () => {
-  let service: TrailsService;
+describe('CourseService', () => {
+  let service: CoursesService;
   let prisma: PrismaService;
 
-  const trailStub: Partial<Trail> = {
+  const couseStub: Partial<Course> = {
     id: 'stub_id',
     title: 'stub_title',
   };
 
   const PrismaServiceMock = {
-    trail: {
+    course: {
       create: jest.fn(({ data }) => ({
         id: 'any_id',
         ...data,
@@ -29,20 +29,20 @@ describe('TrailsService', () => {
           },
         ];
       }),
-      findUnique: jest.fn(({ where }) => ({ ...trailStub, id: where.id })),
+      findUnique: jest.fn(({ where }) => ({ ...couseStub, id: where.id })),
       update: jest.fn(({ where, data }) => ({
-        ...trailStub,
+        ...couseStub,
         ...data,
         id: where.id,
       })),
-      delete: jest.fn(({ where }) => ({ ...trailStub, id: where.id })),
+      delete: jest.fn(({ where }) => ({ ...couseStub, id: where.id })),
     },
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        TrailsService,
+        CoursesService,
         {
           provide: PrismaService,
           useValue: PrismaServiceMock,
@@ -50,7 +50,7 @@ describe('TrailsService', () => {
       ],
     }).compile();
 
-    service = module.get<TrailsService>(TrailsService);
+    service = module.get<CoursesService>(CoursesService);
     prisma = module.get<PrismaService>(PrismaService);
   });
 
@@ -61,7 +61,7 @@ describe('TrailsService', () => {
   describe('create', () => {
     const fakeDate = new Date();
 
-    it('Should return an a new trail', async () => {
+    it('Should return an a new course', async () => {
       const createSpy = jest.spyOn(service, 'create');
 
       const result = await service.create({
@@ -104,7 +104,7 @@ describe('TrailsService', () => {
   });
 
   describe('findOne', () => {
-    it('Should return a trail', async () => {
+    it('Should return a course', async () => {
       const findOneSpy = jest.spyOn(service, 'findOne');
       const result = await service.findOne('any_id');
 
@@ -112,21 +112,21 @@ describe('TrailsService', () => {
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
 
-    it('Should throw 404 if trail not found', async () => {
+    it('Should throw 404 if course not found', async () => {
       const findUniqueSpy = jest
-        .spyOn(prisma.trail, 'findUnique')
+        .spyOn(prisma.course, 'findUnique')
         .mockResolvedValueOnce(null);
       const promise = service.findOne('any_id');
 
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrowError(
-        new NotFoundException('Trilha não encontrada!'),
+        new NotFoundException('Curso não encontrado!'),
       );
     });
   });
 
   describe('update', () => {
-    it('Should return an updated trail', async () => {
+    it('Should return an updated course', async () => {
       const updateSpy = jest.spyOn(service, 'update');
       const result = await service.update('any_id', {
         title: 'updated_title',
@@ -138,9 +138,9 @@ describe('TrailsService', () => {
       );
     });
 
-    it('Should throw 404 if trail not found', async () => {
+    it('Should throw 404 if course not found', async () => {
       const findUniqueSpy = jest
-        .spyOn(prisma.trail, 'findUnique')
+        .spyOn(prisma.course, 'findUnique')
         .mockResolvedValueOnce(null);
       const promise = service.update('any_id', {
         title: 'updated_title',
@@ -148,13 +148,13 @@ describe('TrailsService', () => {
 
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrowError(
-        new NotFoundException('Trilha não encontrada!'),
+        new NotFoundException('Curso não encontrado!'),
       );
     });
   });
 
   describe('remove', () => {
-    it('Should return a deleted trail', async () => {
+    it('Should return a deleted course', async () => {
       const removeSpy = jest.spyOn(service, 'remove');
       const result = await service.remove('any_id');
 
@@ -162,15 +162,15 @@ describe('TrailsService', () => {
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
 
-    it('Should throw 404 if trail not found', async () => {
+    it('Should throw 404 if course not found', async () => {
       const findUniqueSpy = jest
-        .spyOn(prisma.trail, 'findUnique')
+        .spyOn(prisma.course, 'findUnique')
         .mockResolvedValueOnce(null);
       const promise = service.remove('any_id');
 
       expect(findUniqueSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrowError(
-        new NotFoundException('Trilha não encontrada!'),
+        new NotFoundException('Curso não encontrado!'),
       );
     });
   });

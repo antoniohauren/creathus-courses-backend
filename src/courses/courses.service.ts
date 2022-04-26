@@ -1,19 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTrailDto, UpdateTrailDto } from './dtos';
+import { CreateCourseDto, UpdateCourseDto } from './dtos';
 
 @Injectable()
-export class TrailsService {
+export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  create(createTrailDto: CreateTrailDto) {
-    return this.prisma.trail.create({
-      data: createTrailDto,
+  create(createCourseDto: CreateCourseDto) {
+    return this.prisma.course.create({
+      data: createCourseDto,
     });
   }
 
   async findAll() {
-    const result = await this.prisma.trail.findMany({
+    const result = await this.prisma.course.findMany({
       include: {
         lessons: {
           include: {
@@ -23,9 +23,9 @@ export class TrailsService {
       },
     });
 
-    const trails = result.map(({ lessons, ...trail }) => {
+    const courses = result.map(({ lessons, ...course }) => {
       return {
-        ...trail,
+        ...course,
         instructors: lessons.reduce((pv, { instructor: { name } }) => {
           return [...pv.filter(() => !pv.includes(name)), name];
         }, []),
@@ -34,28 +34,28 @@ export class TrailsService {
       };
     });
 
-    return trails;
+    return courses;
   }
 
   async findOne(id: string) {
-    const result = await this.prisma.trail.findUnique({ where: { id } });
+    const result = await this.prisma.course.findUnique({ where: { id } });
 
-    if (!result) throw new NotFoundException('Trilha não encontrada!');
+    if (!result) throw new NotFoundException('Curso não encontrado!');
 
     return result;
   }
 
-  async update(id: string, updateTrailDto: UpdateTrailDto) {
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
     await this.findOne(id);
 
-    return this.prisma.trail.update({
+    return this.prisma.course.update({
       where: { id },
-      data: updateTrailDto,
+      data: updateCourseDto,
     });
   }
 
   async remove(id: string) {
     await this.findOne(id);
-    return this.prisma.trail.delete({ where: { id } });
+    return this.prisma.course.delete({ where: { id } });
   }
 }

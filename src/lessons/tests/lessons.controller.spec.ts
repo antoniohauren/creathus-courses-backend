@@ -11,7 +11,7 @@ describe('LessonsController', () => {
     id: 'any_id',
     duration: 0,
     instructor_id: 'any_instructor_id',
-    trail_id: 'any_trail_id',
+    course_id: 'any_course_id',
   };
 
   const lessonServiceMock = {

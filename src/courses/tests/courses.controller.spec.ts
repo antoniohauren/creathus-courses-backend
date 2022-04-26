@@ -1,35 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Trail } from '../entities/trail.entity';
-import { TrailsController } from '../trails.controller';
-import { TrailsService } from '../trails.service';
+import { Course } from '../entities/courses.entity';
+import { CoursesController } from '../courses.controller';
+import { CoursesService } from '../courses.service';
 
-describe('TrailsController', () => {
-  let controller: TrailsController;
+describe('CoursesController', () => {
+  let controller: CoursesController;
 
-  const trailStub: Partial<Trail> = {
+  const courseStub: Partial<Course> = {
     id: 'stub_id',
     title: 'stub_title',
   };
 
-  const trailServiceMock = {
+  const courseServiceMock = {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
-    findAll: jest.fn(() => [trailStub]),
-    findOne: jest.fn((id) => ({ ...trailStub, id })),
-    update: jest.fn((id, data) => ({ ...trailStub, ...data, id })),
-    remove: jest.fn((id) => ({ ...trailStub, id })),
+    findAll: jest.fn(() => [courseStub]),
+    findOne: jest.fn((id) => ({ ...courseStub, id })),
+    update: jest.fn((id, data) => ({ ...courseStub, ...data, id })),
+    remove: jest.fn((id) => ({ ...courseStub, id })),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TrailsController],
+      controllers: [CoursesController],
       providers: [
-        { provide: TrailsService, useValue: trailServiceMock },
+        { provide: CoursesService, useValue: courseServiceMock },
         PrismaService,
       ],
     }).compile();
 
-    controller = module.get<TrailsController>(TrailsController);
+    controller = module.get<CoursesController>(CoursesController);
   });
 
   it('should be defined', () => {
@@ -39,7 +39,7 @@ describe('TrailsController', () => {
   describe('create', () => {
     const fakeDate = new Date();
 
-    it('Should create a new trails', () => {
+    it('Should create a new course', () => {
       expect(
         controller.create({
           title: 'any_title',
@@ -55,21 +55,23 @@ describe('TrailsController', () => {
   });
 
   describe('findAll', () => {
-    it('Should return a list of trails', () => {
-      expect(controller.findAll()).toEqual(expect.arrayContaining([trailStub]));
+    it('Should return a list of courses', () => {
+      expect(controller.findAll()).toEqual(
+        expect.arrayContaining([courseStub]),
+      );
     });
   });
 
   describe('findOne', () => {
-    it('Should return a trails', () => {
+    it('Should return a course', () => {
       expect(controller.findOne('any_id')).toEqual(
-        expect.objectContaining({ ...trailStub, id: 'any_id' }),
+        expect.objectContaining({ ...courseStub, id: 'any_id' }),
       );
     });
   });
 
   describe('update', () => {
-    it('Should return a updated trails', () => {
+    it('Should return a updated course', () => {
       expect(controller.update('any_id', { title: 'any_title' })).toEqual(
         expect.objectContaining({
           id: 'any_id',
@@ -80,7 +82,7 @@ describe('TrailsController', () => {
   });
 
   describe('remove', () => {
-    it('Should return a removed trails', () => {
+    it('Should return a removed course', () => {
       expect(controller.remove('any_id')).toEqual(
         expect.objectContaining({
           id: 'any_id',

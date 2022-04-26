@@ -1,6 +1,6 @@
 import { IsDateString, IsString } from 'class-validator';
 
-export class CreateTrailDto {
+export class CreateCourseDto {
   @IsString()
   title: string;
 
