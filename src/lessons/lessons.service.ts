@@ -61,10 +61,56 @@ export class LessonsService {
   async update(id: string, updateLessonDto: UpdateLessonDto) {
     await this.findOne(id);
 
-    if (!updateLessonDto.instructor_email) {
+    if (!updateLessonDto.instructor_email && !updateLessonDto.course_id) {
       return this.prisma.lesson.update({
         where: { id },
         data: updateLessonDto,
+      });
+    }
+
+    if (updateLessonDto.instructor_email && !updateLessonDto.course_id) {
+      const instructor = await this.prisma.instructor.findUnique({
+        where: { email: updateLessonDto.instructor_email },
+      });
+
+      if (!instructor)
+        throw new BadRequestException(
+          'Não foi encontrado Nenhum instrutor com esse email!',
+        );
+
+      return this.prisma.lesson.update({
+        where: { id },
+        data: {
+          duration: updateLessonDto.duration,
+          instructor: {
+            connect: {
+              id: instructor.id,
+            },
+          },
+        },
+      });
+    }
+
+    if (!updateLessonDto.instructor_email && updateLessonDto.course_id) {
+      const course = await this.prisma.course.findUnique({
+        where: { id: updateLessonDto.course_id },
+      });
+
+      if (!course)
+        throw new BadRequestException(
+          'Não foi encontrado Nenhum curso com esse ID!',
+        );
+
+      return this.prisma.lesson.update({
+        where: { id },
+        data: {
+          duration: updateLessonDto.duration,
+          course: {
+            connect: {
+              id: course.id,
+            },
+          },
+        },
       });
     }
 
@@ -75,6 +121,15 @@ export class LessonsService {
     if (!instructor)
       throw new BadRequestException(
         'Não foi encontrado Nenhum instrutor com esse email!',
+      );
+
+    const course = await this.prisma.course.findUnique({
+      where: { id: updateLessonDto.course_id },
+    });
+
+    if (!course)
+      throw new BadRequestException(
+        'Não foi encontrado Nenhum curso com esse ID!',
       );
 
     return this.prisma.lesson.update({
