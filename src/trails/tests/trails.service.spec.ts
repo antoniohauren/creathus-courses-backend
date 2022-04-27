@@ -26,6 +26,7 @@ describe('TrailsService', () => {
         id: where.id,
         ...data,
       })),
+      delete: jest.fn(({ where }) => ({ ...TrailStub, id: where.id })),
     },
   };
 
@@ -83,7 +84,7 @@ describe('TrailsService', () => {
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
 
-    it('Should throw 404 if instructor not found', async () => {
+    it('Should throw 404 if trail not found', async () => {
       const findUniqueSpy = jest
         .spyOn(prisma.trail, 'findUnique')
         .mockResolvedValueOnce(null);
@@ -117,6 +118,16 @@ describe('TrailsService', () => {
 
       expect(updateSpy).toHaveBeenCalled();
       expect(promise).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('delete', () => {
+    it('Should return a deleted trail', async () => {
+      const removeSpy = jest.spyOn(service, 'remove');
+      const result = await service.remove('any_id');
+
+      expect(removeSpy).toHaveBeenCalledWith('any_id');
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });
