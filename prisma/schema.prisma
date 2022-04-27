@@ -61,6 +61,7 @@ model Course {
 model Trail {
   // Fields
   id         String   @id @default(uuid())
+  name       String
   //Relations
   course     Course[]
   //Generated
