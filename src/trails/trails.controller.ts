@@ -1,7 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CreateTrailDto, UpdateTrailDto } from './dtos';
 import { TrailsService } from './trails.service';
-import { CreateTrailDto } from './dto/create-trail.dto';
-import { UpdateTrailDto } from './dto/update-trail.dto';
 
 @Controller('trails')
 export class TrailsController {

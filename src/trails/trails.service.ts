@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTrailDto } from './dto/create-trail.dto';
-import { UpdateTrailDto } from './dto/update-trail.dto';
+import { CreateTrailDto, UpdateTrailDto } from './dtos';
 
 @Injectable()
 export class TrailsService {

@@ -4,6 +4,6 @@ import { TrailsController } from './trails.controller';
 
 @Module({
   controllers: [TrailsController],
-  providers: [TrailsService]
+  providers: [TrailsService],
 })
 export class TrailsModule {}

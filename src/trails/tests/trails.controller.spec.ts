@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TrailsController } from './trails.controller';
-import { TrailsService } from './trails.service';
+import { TrailsController } from '../trails.controller';
+import { TrailsService } from '../trails.service';
 
 describe('TrailsController', () => {
   let controller: TrailsController;
