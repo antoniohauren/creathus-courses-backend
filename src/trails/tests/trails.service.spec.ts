@@ -78,5 +78,17 @@ describe('TrailsService', () => {
       expect(findOneSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
+
+    it('Should throw 404 if instructor not found', async () => {
+      const findUniqueSpy = jest
+        .spyOn(prisma.trail, 'findUnique')
+        .mockResolvedValueOnce(null);
+      const promise = service.findOne('any_id');
+
+      expect(findUniqueSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrow(
+        new NotFoundException('Trilha não encontrada!'),
+      );
+    });
   });
 });
