@@ -24,8 +24,11 @@ export class TrailsService {
     return this.prisma.trail.findUnique({ where: { id } });
   }
 
-  update(id: number, updateTrailDto: UpdateTrailDto) {
-    return `This action updates a #${id} trail`;
+  update(id: string, updateTrailDto: UpdateTrailDto) {
+    return this.prisma.trail.update({
+      where: { id },
+      data: updateTrailDto,
+    });
   }
 
   remove(id: number) {
