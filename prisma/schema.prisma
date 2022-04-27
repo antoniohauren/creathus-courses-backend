@@ -16,7 +16,7 @@ model Instructor {
   name       String
   email      String
   // Relations
-  Lesson     Lesson[]
+  lessons    Lesson[]
   // Generated
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
@@ -49,7 +49,7 @@ model Course {
   end_date   DateTime
   // Relations
   lessons    Lesson[]
-  Trail      Trail?   @relation(fields: [trail_id], references: [id])
+  trail      Trail?   @relation(fields: [trail_id], references: [id])
   trail_id   String?
   // Generated
   created_at DateTime @default(now())

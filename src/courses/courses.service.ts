@@ -15,6 +15,11 @@ export class CoursesService {
   async findAll() {
     const result = await this.prisma.course.findMany({
       include: {
+        trail: {
+          select: {
+            name: true,
+          },
+        },
         lessons: {
           include: {
             instructor: true,
