@@ -49,9 +49,24 @@ model Course {
   end_date   DateTime
   // Relations
   lessons    Lesson[]
+  Trail      Trail?   @relation(fields: [trail_id], references: [id])
+  trail_id   String?
   // Generated
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()
 
   @@map("courses")
+}
+
+model Trail {
+  // Fields
+  id         String   @id @default(uuid())
+  name       String
+  //Relations
+  courses    Course[]
+  //Generated
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+
+  @@map("trails")
 }

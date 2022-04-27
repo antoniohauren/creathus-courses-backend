@@ -73,7 +73,8 @@
       "**/*.(t|j)s",
       "!**/*.entity.ts",
       "!**/*.module.ts",
-      "!main.ts"
+      "!main.ts",
+      "!**/prisma.service*"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
