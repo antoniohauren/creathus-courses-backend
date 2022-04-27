@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTrailDto, UpdateTrailDto } from './dtos';
 
@@ -20,18 +20,23 @@ export class TrailsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.trail.findUnique({ where: { id } });
+  async findOne(id: string) {
+    const result = await this.prisma.trail.findUnique({ where: { id } });
+    if (!result) throw new NotFoundException('Trilha não encontrada!');
   }
 
-  update(id: string, updateTrailDto: UpdateTrailDto) {
+  async update(id: string, updateTrailDto: UpdateTrailDto) {
+    await this.findOne(id);
+
     return this.prisma.trail.update({
       where: { id },
       data: updateTrailDto,
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
+
     return this.prisma.trail.delete({ where: { id } });
   }
 }
