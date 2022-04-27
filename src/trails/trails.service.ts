@@ -31,7 +31,7 @@ export class TrailsService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} trail`;
+  remove(id: string) {
+    return this.prisma.trail.delete({ where: { id } });
   }
 }
