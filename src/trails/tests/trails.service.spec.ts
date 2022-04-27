@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Trail } from '../entities/trail.entity';
@@ -5,6 +6,7 @@ import { TrailsService } from '../trails.service';
 
 describe('TrailsService', () => {
   let service: TrailsService;
+  let prisma: PrismaService;
 
   const TrailStub: Partial<Trail> = {
     id: 'stub_id',
@@ -19,6 +21,7 @@ describe('TrailsService', () => {
         ...data,
       })),
       findMany: jest.fn(() => [TrailStub]),
+      findUnique: jest.fn(({ where }) => ({ ...TrailStub, id: where.id })),
     },
   };
 
@@ -31,6 +34,7 @@ describe('TrailsService', () => {
     }).compile();
 
     service = module.get<TrailsService>(TrailsService);
+    prisma = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
@@ -63,6 +67,16 @@ describe('TrailsService', () => {
 
       expect(findAllSpy).toHaveBeenCalled();
       expect(result).toEqual(expect.arrayContaining([TrailStub]));
+    });
+  });
+
+  describe('findOne', () => {
+    it('Should return an trail with correct id', async () => {
+      const findOneSpy = jest.spyOn(service, 'findOne');
+      const result = await service.findOne('any_id');
+
+      expect(findOneSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.objectContaining({ id: 'any_id' }));
     });
   });
 });

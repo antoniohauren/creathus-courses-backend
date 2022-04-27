@@ -28,6 +28,7 @@ export class TrailsService {
   async findOne(id: string) {
     const result = await this.prisma.trail.findUnique({ where: { id } });
     if (!result) throw new NotFoundException('Trilha não encontrada!');
+    return result;
   }
 
   async update(id: string, updateTrailDto: UpdateTrailDto) {
