@@ -17,6 +17,7 @@ describe('TrailsController', () => {
     create: jest.fn((data) => ({ id: 'any_id', ...data })),
     findAll: jest.fn(() => [TrailStub]),
     findOne: jest.fn((id) => ({ ...TrailStub, id })),
+    update: jest.fn((id, data) => ({ ...TrailStub, ...data, id })),
   };
 
   beforeEach(async () => {
@@ -57,6 +58,17 @@ describe('TrailsController', () => {
         expect.objectContaining({
           ...TrailStub,
           id: 'any_id',
+        }),
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('Should return a updated instructor', () => {
+      expect(controller.update('any_id', { name: 'updated_name' })).toEqual(
+        expect.objectContaining({
+          id: 'any_id',
+          name: 'updated_name',
         }),
       );
     });
