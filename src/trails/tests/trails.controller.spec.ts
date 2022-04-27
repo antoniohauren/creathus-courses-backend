@@ -38,7 +38,7 @@ describe('TrailsController', () => {
   });
 
   describe('create', () => {
-    it('Should create a new instructor', () => {
+    it('Should create a new trail', () => {
       expect(controller.create({ name: 'any_name' })).toEqual(
         expect.objectContaining({
           name: 'any_name',
@@ -48,13 +48,13 @@ describe('TrailsController', () => {
   });
 
   describe('findAll', () => {
-    it('Should return a list of instructors', () => {
+    it('Should return a list of trails', () => {
       expect(controller.findAll()).toEqual(expect.arrayContaining([TrailStub]));
     });
   });
 
   describe('findOne', () => {
-    it('Should return a instructor', () => {
+    it('Should return a trail', () => {
       expect(controller.findOne('any_id')).toEqual(
         expect.objectContaining({
           ...TrailStub,
@@ -65,7 +65,7 @@ describe('TrailsController', () => {
   });
 
   describe('update', () => {
-    it('Should return a updated instructor', () => {
+    it('Should return an updated trail', () => {
       expect(controller.update('any_id', { name: 'updated_name' })).toEqual(
         expect.objectContaining({
           id: 'any_id',
@@ -76,7 +76,7 @@ describe('TrailsController', () => {
   });
 
   describe('remove', () => {
-    it('Should return a removed instructor', () => {
+    it('Should return a removed trail', () => {
       expect(controller.remove('any_id')).toEqual(
         expect.objectContaining({
           id: 'any_id',
