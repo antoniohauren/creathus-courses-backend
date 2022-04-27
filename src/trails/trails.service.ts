@@ -15,7 +15,12 @@ export class TrailsService {
   findAll() {
     return this.prisma.trail.findMany({
       include: {
-        courses: true,
+        courses: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
       },
     });
   }
