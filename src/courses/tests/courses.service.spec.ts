@@ -68,12 +68,14 @@ describe('CourseService', () => {
         title: 'any_title',
         start_date: fakeDate,
         end_date: fakeDate,
+        trail_id: 'any_id',
       });
 
       expect(createSpy).toHaveBeenCalledWith({
         title: 'any_title',
         start_date: fakeDate,
         end_date: fakeDate,
+        trail_id: 'any_id',
       });
       expect(result).toEqual(
         expect.objectContaining({

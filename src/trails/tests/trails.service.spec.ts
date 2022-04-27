@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../../prisma/prisma.service';
 import { TrailsService } from '../trails.service';
 
 describe('TrailsService', () => {
@@ -6,7 +7,7 @@ describe('TrailsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TrailsService],
+      providers: [TrailsService, PrismaService],
     }).compile();
 
     service = module.get<TrailsService>(TrailsService);

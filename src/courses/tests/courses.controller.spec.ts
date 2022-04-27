@@ -45,6 +45,7 @@ describe('CoursesController', () => {
           title: 'any_title',
           start_date: fakeDate,
           end_date: fakeDate,
+          trail_id: 'any_id',
         }),
       ).toEqual(
         expect.objectContaining({

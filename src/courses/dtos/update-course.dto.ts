@@ -5,17 +5,17 @@ import { CreateCourseDto } from './create-course.dto';
 export class UpdateCourseDto extends PartialType(CreateCourseDto) {
   @IsString()
   @IsOptional()
-  title: string;
+  title?: string;
 
   @IsUUID()
   @IsOptional()
-  trail_id: string;
+  trail_id?: string;
 
   @IsDateString()
   @IsOptional()
-  start_date: Date;
+  start_date?: Date;
 
   @IsDateString()
   @IsOptional()
-  end_date: Date;
+  end_date?: Date;
 }
