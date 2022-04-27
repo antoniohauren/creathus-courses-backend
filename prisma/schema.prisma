@@ -63,7 +63,7 @@ model Trail {
   id         String   @id @default(uuid())
   name       String
   //Relations
-  course     Course[]
+  courses    Course[]
   //Generated
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt()

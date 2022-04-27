@@ -13,7 +13,11 @@ export class TrailsService {
   }
 
   findAll() {
-    return `This action returns all trails`;
+    return this.prisma.trail.findMany({
+      include: {
+        courses: true,
+      },
+    });
   }
 
   findOne(id: number) {
