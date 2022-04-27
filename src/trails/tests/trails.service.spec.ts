@@ -1,9 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
+import { Trail } from '../entities/trail.entity';
 import { TrailsService } from '../trails.service';
 
 describe('TrailsService', () => {
   let service: TrailsService;
+
+  const TrailStub: Partial<Trail> = {
+    id: 'stub_id',
+    name: 'stub_name',
+    courses: [],
+  };
 
   const PrismaServiceMock = {
     trail: {
@@ -11,6 +18,7 @@ describe('TrailsService', () => {
         id: 'any_id',
         ...data,
       })),
+      findMany: jest.fn(() => [TrailStub]),
     },
   };
 
@@ -45,6 +53,16 @@ describe('TrailsService', () => {
           name: 'any_name',
         }),
       );
+    });
+  });
+
+  describe('findAll', () => {
+    it('Should return a list of trails', async () => {
+      const findAllSpy = jest.spyOn(service, 'findAll');
+      const result = await service.findAll();
+
+      expect(findAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(expect.arrayContaining([TrailStub]));
     });
   });
 });
