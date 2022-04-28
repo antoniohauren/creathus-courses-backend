@@ -166,6 +166,31 @@ describe('CourseService', () => {
         ]),
       );
     });
+
+    it('Should return open_date as valid if it is on the furure', async () => {
+      const findAllSpy = jest.spyOn(service, 'findAll');
+      jest.spyOn(prisma.course, 'findMany').mockResolvedValueOnce([
+        {
+          trail: {
+            name: 'trail_name',
+          },
+          lessons: [],
+          start_date: new Date(),
+          end_date: new Date(),
+          open_date: new Date('2500-12-31T05:00:00.000Z'),
+        },
+      ] as any);
+
+      const result = await service.findAll();
+      expect(findAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            open_date: '31/12',
+          }),
+        ]),
+      );
+    });
   });
 
   describe('findOne', () => {
