@@ -141,6 +141,31 @@ describe('CourseService', () => {
         ]),
       );
     });
+
+    it('Should return -- if there is no instructors', async () => {
+      const findAllSpy = jest.spyOn(service, 'findAll');
+      jest.spyOn(prisma.course, 'findMany').mockResolvedValueOnce([
+        {
+          trail: {
+            name: 'trail_name',
+          },
+          lessons: [],
+          start_date: new Date(),
+          end_date: new Date(),
+          open_date: new Date(),
+        },
+      ] as any);
+
+      const result = await service.findAll();
+      expect(findAllSpy).toHaveBeenCalled();
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            instructors: ['--'],
+          }),
+        ]),
+      );
+    });
   });
 
   describe('findOne', () => {
