@@ -135,7 +135,7 @@ describe('CourseService', () => {
         expect.arrayContaining([
           expect.objectContaining({
             instructors: ['instructor_name'],
-            lession_count: 2,
+            lesson_count: 2,
             total_duration: 30,
           }),
         ]),

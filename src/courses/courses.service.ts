@@ -38,6 +38,12 @@ export class CoursesService {
       },
     });
 
+    const checkIsOpen = (dataString: Date) => {
+      const today = new Date();
+      if (dataString.getTime() > today.getTime()) return formatDate(dataString);
+      return undefined;
+    };
+
     const formatDate = (dateString: Date) => {
       return dateString.toLocaleDateString('pt-BR', {
         day: '2-digit',
@@ -67,15 +73,18 @@ export class CoursesService {
           ...course,
           start_date: [formatDate(start_date), formatTime(start_date)],
           end_date: formatDate(end_date),
-          open_date: formatDate(open_date),
-          instructors: lessons.reduce((pv, { instructor: { name } }) => {
-            return [...pv.filter(() => !pv.includes(name)), name];
-          }, []),
+          open_date: checkIsOpen(open_date),
+          instructors: lessons.length
+            ? lessons.reduce((pv, { instructor: { name } }) => {
+                if (!pv.includes(name)) pv.push(name);
+                return pv;
+              }, [])
+            : ['--'],
           trail: {
             id: trail_id,
             name: trail.name,
           },
-          lession_count: lessons.length,
+          lesson_count: lessons.length,
           total_duration: lessons.reduce((pv, cv) => pv + cv.duration, 0),
         };
       },

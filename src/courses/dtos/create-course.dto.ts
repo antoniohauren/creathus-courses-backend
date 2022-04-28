@@ -9,7 +9,6 @@ export class CreateCourseDto {
   @ApiProperty()
   @ApiPropertyOptional()
   @IsUUID()
-  @IsOptional()
   trail_id: string;
 
   @ApiProperty()
