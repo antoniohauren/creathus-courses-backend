@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseDto, UpdateCourseDto } from './dtos';
 
@@ -6,7 +10,13 @@ import { CreateCourseDto, UpdateCourseDto } from './dtos';
 export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  create(createCourseDto: CreateCourseDto) {
+  async create(createCourseDto: CreateCourseDto) {
+    const trail = await this.prisma.trail.findUnique({
+      where: { id: createCourseDto.trail_id },
+    });
+
+    if (!trail) throw new BadRequestException('Trilha não encontrada!');
+
     return this.prisma.course.create({
       data: createCourseDto,
     });
@@ -28,16 +38,48 @@ export class CoursesService {
       },
     });
 
-    const courses = result.map(({ lessons, ...course }) => {
-      return {
-        ...course,
-        instructors: lessons.reduce((pv, { instructor: { name } }) => {
-          return [...pv.filter(() => !pv.includes(name)), name];
-        }, []),
-        lession_count: lessons.length,
-        total_duration: lessons.reduce((pv, cv) => pv + cv.duration, 0),
-      };
-    });
+    const formatDate = (dateString: Date) => {
+      return dateString.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
+    };
+
+    const formatTime = (dateString: Date) => {
+      return dateString.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Fortaleza',
+      });
+    };
+
+    const courses = result.map(
+      ({
+        lessons,
+        start_date,
+        end_date,
+        open_date,
+        trail,
+        trail_id,
+        ...course
+      }) => {
+        return {
+          ...course,
+          start_date: [formatDate(start_date), formatTime(start_date)],
+          end_date: formatDate(end_date),
+          open_date: formatDate(open_date),
+          instructors: lessons.reduce((pv, { instructor: { name } }) => {
+            return [...pv.filter(() => !pv.includes(name)), name];
+          }, []),
+          trail: {
+            id: trail_id,
+            name: trail.name,
+          },
+          lession_count: lessons.length,
+          total_duration: lessons.reduce((pv, cv) => pv + cv.duration, 0),
+        };
+      },
+    );
 
     return courses;
   }
