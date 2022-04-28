@@ -22,10 +22,22 @@ describe('CourseService', () => {
       findMany: jest.fn().mockImplementation(() => {
         return [
           {
+            trail: {
+              name: 'trail_name',
+            },
             lessons: [
-              { instructor: { name: 'instructor_name' }, duration: 10 },
-              { instructor: { name: 'instructor_name' }, duration: 20 },
+              {
+                instructor: { name: 'instructor_name' },
+                duration: 10,
+              },
+              {
+                instructor: { name: 'instructor_name' },
+                duration: 20,
+              },
             ],
+            start_date: new Date(),
+            end_date: new Date(),
+            open_date: new Date(),
           },
         ];
       }),
@@ -36,6 +48,9 @@ describe('CourseService', () => {
         id: where.id,
       })),
       delete: jest.fn(({ where }) => ({ ...couseStub, id: where.id })),
+    },
+    trail: {
+      findUnique: jest.fn(({ where }) => ({ id: where.id })),
     },
   };
 
@@ -68,14 +83,18 @@ describe('CourseService', () => {
         title: 'any_title',
         start_date: fakeDate,
         end_date: fakeDate,
+        open_date: fakeDate,
         trail_id: 'any_id',
+        location: 'any_location',
       });
 
       expect(createSpy).toHaveBeenCalledWith({
         title: 'any_title',
         start_date: fakeDate,
         end_date: fakeDate,
+        open_date: fakeDate,
         trail_id: 'any_id',
+        location: 'any_location',
       });
       expect(result).toEqual(
         expect.objectContaining({
@@ -88,7 +107,7 @@ describe('CourseService', () => {
   });
 
   describe('findAll', () => {
-    it('Should return trials information', async () => {
+    it('Should return courses information', async () => {
       const findAllSpy = jest.spyOn(service, 'findAll');
       const result = await service.findAll();
 
