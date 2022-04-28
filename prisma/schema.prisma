@@ -47,6 +47,8 @@ model Course {
   title      String
   start_date DateTime
   end_date   DateTime
+  open_date  DateTime
+  location   String
   // Relations
   lessons    Lesson[]
   trail      Trail?   @relation(fields: [trail_id], references: [id])

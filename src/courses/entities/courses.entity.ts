@@ -14,6 +14,12 @@ export class Course {
   end_date: Date;
 
   @ApiProperty()
+  open_date: Date;
+
+  @ApiProperty()
+  location: string;
+
+  @ApiProperty()
   created_at: Date;
 
   @ApiProperty()

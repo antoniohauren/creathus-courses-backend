@@ -27,4 +27,12 @@ export class UpdateCourseDto extends PartialType(CreateCourseDto) {
   @IsDateString()
   @IsOptional()
   end_date?: Date;
+
+  @ApiProperty()
+  @IsDateString()
+  open_date?: Date;
+
+  @ApiProperty()
+  @IsString()
+  location?: string;
 }
