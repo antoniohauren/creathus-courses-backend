@@ -19,7 +19,6 @@ async function bootstrap() {
       tagsSorter: 'alpha',
     },
   });
-  app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get('PORT'));
 }
 bootstrap();
