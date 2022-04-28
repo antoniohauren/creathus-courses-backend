@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Course } from '../entities/courses.entity';
@@ -102,6 +102,25 @@ describe('CourseService', () => {
           start_date: fakeDate,
           end_date: fakeDate,
         }),
+      );
+    });
+
+    it('Should throw if invalid trail_id is provided', async () => {
+      const createSpy = jest.spyOn(service, 'create');
+      jest.spyOn(prisma.trail, 'findUnique').mockResolvedValueOnce(null);
+
+      const promise = service.create({
+        title: 'any_title',
+        start_date: fakeDate,
+        end_date: fakeDate,
+        open_date: fakeDate,
+        trail_id: 'any_id',
+        location: 'any_location',
+      });
+
+      expect(createSpy).toHaveBeenCalled();
+      expect(promise).rejects.toThrowError(
+        new BadRequestException('Trilha não encontrada!'),
       );
     });
   });
